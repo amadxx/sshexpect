@@ -26,7 +26,7 @@
 from distutils.core import setup
 
 setup(name='sshexpect',
-        version="1.0.1",
+        version="1.0.2",
         description='pexpect for asyncssh and paramiko',
         author='Dmytro Pavlyuk',
         author_email='dmitry.pavluk@gmail.com',

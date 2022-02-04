@@ -48,7 +48,7 @@ except ImportError:
 
 class SSHClientProcessExpect(pexpect.fdpexpect.fdspawn):
     "Fdspawn-based class for asyncssh process"
-    def __init__(self, fd: int, proc: asyncssh.process.SSHClientProcess, *args, **kwargs) -> None:
+    def __init__(self, fd: int, proc: "asyncssh.process.SSHClientProcess", *args, **kwargs) -> None:
         super().__init__(fd, *args, **kwargs)
         self.ssh_proc = proc
 
@@ -80,7 +80,7 @@ class SSHClientProcessExpect(pexpect.fdpexpect.fdspawn):
         return super().expect(*args, **kw)
 
 
-async def spawn_asyncssh(connection: asyncssh.SSHClientConnection
+async def spawn_asyncssh(connection: "asyncssh.SSHClientConnection"
                         , *args, **kw) \
                         -> SSHClientProcessExpect:
     "Spawn process using SSHClientConnection.create_process"
