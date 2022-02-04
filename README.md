@@ -4,6 +4,8 @@
 
 This library adapts `pexpect` to work with `asyncssh` and `paramiko`
 
+See [wiki](https://github.com/amadxx/sshexpect/wiki) for more information.
+
 ## asyncssh example
 
 ```python
