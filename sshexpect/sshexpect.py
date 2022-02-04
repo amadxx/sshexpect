@@ -83,7 +83,13 @@ class SSHClientProcessExpect(pexpect.fdpexpect.fdspawn):
 async def spawn_asyncssh(connection: "asyncssh.SSHClientConnection"
                         , *args, **kw) \
                         -> SSHClientProcessExpect:
-    "Spawn process using SSHClientConnection.create_process"
+    """
+        Spawn process using asyncssh :class:`SSHClientConnection`
+
+        It have same arguments as :meth:`create_process` of :class:`SSHClientConnection`
+
+        :returns: :class:`.SSHClientProcessExpect`
+    """
 
     # Prepare pipe to redirect process stdout to fdexpect
     child_fd, kw["stdout"] = os.pipe()
@@ -126,8 +132,27 @@ def spawn_paramiko(connection: "paramiko.SSHClient"
                   , command: typing.AnyStr
                   , **kw) \
                     -> ParamikoChannelExpect:
-    "Spawn process using SSHClientConnection.create_process"
+    """Spawn process using paramiko :class:`SSHClient`
 
+        :param str command: a shell command to execute.
+
+        :param int window_size: optional window size for this session.
+        :param int max_packet_size: optional max packet size for this session.
+
+        :param str term: the terminal type to emulate
+            (for example, ``'vt100'``)
+        :param int width: width (in characters) of the terminal screen
+        :param int height: height (in characters) of the terminal screen
+        :param int width_pixels: width (in pixels) of the terminal screen
+        :param int height_pixels: height (in pixels) of the terminal screen
+
+
+        :returns: `.ParamikoChannelExpect`
+
+        :raises:
+            `paramiko.SSHException` -- if the request is rejected or the session ends
+            prematurely
+    """
     # Prepare pipe to redirect process stdout to fdexpect
     child_fd, stdout = os.pipe()
 
@@ -175,14 +200,28 @@ def spawn_paramiko(connection: "paramiko.SSHClient"
 
 
 def spawn(connection: "typing.Union[asyncssh.SSHClientConnection, paramiko.SSHClient]"
-         , *args, **kw) \
+         , command, *args, **kw) \
          -> typing.Union[SSHClientProcessExpect, ParamikoChannelExpect]:
-    "Spawn SSH process"
+    """Spawn SSH process and create pexpect-like object
+
+       :param connection:
+            Object which represents SSH connection
+            It can be one of following classes:
+            - :class:`asyncssh.SSHClientConnection`
+            - :class:`paramiko.SSHClient`
+
+        :param str command: a shell command to execute.
+
+        :type connection: `asyncssh.SSHClientConnection` or `paramiko.SSHClient`
+
+        :returns: `SSHClientProcessExpect` or `ParamikoChannelExpect`
+
+    """
 
     if HAVE_ASYNCSSH and issubclass(type(connection), asyncssh.SSHClientConnection):
-        return spawn_asyncssh(connection, *args, **kw)
+        return spawn_asyncssh(connection, command, *args, **kw)
 
     if HAVE_PARAMIKO and issubclass(type(connection), paramiko.SSHClient):
-        return spawn_paramiko(connection, *args, **kw)
+        return spawn_paramiko(connection, command, *args, **kw)
 
     raise ValueError("Unsupported connection type")
