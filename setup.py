@@ -26,8 +26,8 @@
 from distutils.core import setup
 
 setup(name='sshexpect',
-        version="1.0.0",
-        description='pexpect for asyncssh',
+        version="1.0.1",
+        description='pexpect for asyncssh and paramiko',
         author='Dmytro Pavlyuk',
         author_email='dmitry.pavluk@gmail.com',
         url='http://www.amad.pp.ua',

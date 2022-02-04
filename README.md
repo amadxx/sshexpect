@@ -2,9 +2,9 @@
 
 ## Overview
 
-This library adapts `pexpect` to work with `asyncssh`
+This library adapts `pexpect` to work with `asyncssh` and `paramiko`
 
-## Usage
+## asyncssh example
 
 ```python
 import asyncssh
@@ -16,11 +16,29 @@ child = await sshexpect.spawn(connection, "bash")
 await child.expect(...)
 child.sendline(...)
 
+child.terminate()
+```
+
+## paramiko example
+
+```python
+import paramiko
+import sshexpect
+
+connection = paramiko.SSHClient()
+connection.connect(...)
+
+child = sshexpect.spawn(connection, "bash")
+
+child.expect(...)
+child.sendline(...)
+
+child.terminate()
 ```
 
 ## Installation 
 ```shell
-pip3 install git+https://github.com/amadxx/sshexpect.git
+pip install git+https://github.com/amadxx/sshexpect.git
 ```
 
 ## License
