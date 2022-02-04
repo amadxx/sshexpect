@@ -13,9 +13,11 @@ import asyncssh
 import sshexpect
 
 connection = await asyncssh.connect(...)
+
 child = await sshexpect.spawn(connection, "bash")
 
 await child.expect(...)
+print(child.before)
 child.sendline(...)
 
 child.terminate()
@@ -33,6 +35,7 @@ connection.connect(...)
 child = sshexpect.spawn(connection, "bash")
 
 child.expect(...)
+print(child.before)
 child.sendline(...)
 
 child.terminate()

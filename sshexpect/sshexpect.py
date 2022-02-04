@@ -59,20 +59,18 @@ class SSHClientProcessExpect(pexpect.fdpexpect.fdspawn):
         else:
             self.ssh_proc.terminate()
 
-    def send(self, s):
-        "Write to fd, return number of bytes written"
-        self.ssh_proc.stdin.write(f"{s}")
-        return len(s)
+    def send(self, s: "typing.Union[str, bytes]"):
+        "Write to stdin, return number of bytes written"
 
-    def sendline(self, s):
-        "Write to fd, return number of bytes written"
-        data = f"{s}{os.linesep}"
-        self.ssh_proc.stdin.write(data)
-        return len(data)
+        if isinstance(s, (bytes, bytearray)):
+            datalen = len(s)
+            s = s.decode(self.encoding, self.codec_errors)
+        else:
+            datalen = len(s.encode(self.encoding, self.codec_errors))
 
-    def write(self, s):
-        "Write to fd, return None"
-        return self.ssh_proc.stdin.write(f"{s}")
+        self.ssh_proc.stdin.write(s)
+
+        return datalen
 
     def expect(self, *args, **kw):
         "Run fdexpect.expect asynchronously"
@@ -97,11 +95,19 @@ async def spawn_asyncssh(connection: "asyncssh.SSHClientConnection"
     # Set default terminal to request PTY
     kw["term_type"] = kw.get("term_type", "vt100")
 
+    # Set default encoding options
+    kw["encoding"] = kw.get("encoding", "utf-8")
+    kw["errors"] = kw.get("errors", "strict")
+
     # Spawn remote process
     proc = await connection.create_process(*args, **kw)
 
     # Create fdspawn child
-    return SSHClientProcessExpect(child_fd, proc)
+    return SSHClientProcessExpect(child_fd
+                                 , proc
+                                 , encoding=kw["encoding"]
+                                 , codec_errors=kw["errors"]
+                                 )
 
 
 class ParamikoChannelExpect(pexpect.fdpexpect.fdspawn):
@@ -115,17 +121,8 @@ class ParamikoChannelExpect(pexpect.fdpexpect.fdspawn):
         self.ssh_proc.close()
 
     def send(self, s):
-        "Write to fd, return number of bytes written"
+        "Write to stdin, return number of bytes written"
         return self.ssh_proc.send(s)
-
-    def sendline(self, s):
-        "Write to fd, return number of bytes written"
-        data = f"{s}{os.linesep}"
-        return self.ssh_proc.send(data)
-
-    def write(self, s):
-        "Write to fd, return None"
-        self.ssh_proc.send(s)
 
 
 def spawn_paramiko(connection: "paramiko.SSHClient"
@@ -159,7 +156,7 @@ def spawn_paramiko(connection: "paramiko.SSHClient"
     kwkeys = {
         "session": ("window_size", "max_packet_size", "timeout"),
         "pty": ("term", "width", "height", "width_pixels", "height_pixels"),
-        "spawn": ("buff_size",)
+        "spawn": ("buff_size", "encoding", "errors")
     }
 
     kwmap = {}
@@ -196,7 +193,11 @@ def spawn_paramiko(connection: "paramiko.SSHClient"
     # Thread will finish after terminate() call
     thread.start()
 
-    return ParamikoChannelExpect(child_fd, session)
+    return ParamikoChannelExpect(child_fd
+                                , session
+                                , encoding=kwmap["spawn"].get("encoding", "utf-8")
+                                , codec_errors=kwmap["spawn"].get("errors", "strict")
+                                )
 
 
 def spawn(connection: "typing.Union[asyncssh.SSHClientConnection, paramiko.SSHClient]"
