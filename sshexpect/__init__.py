@@ -24,4 +24,4 @@ LICENSE:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
-from .sshexpect import spawn, SSHClientProcessExpect
+from .sshexpect import spawn, SSHClientProcessExpect, ParamikoChannelExpect

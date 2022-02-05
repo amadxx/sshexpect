@@ -43,7 +43,7 @@ child.terminate()
 
 ## Installation 
 ```shell
-pip install git+https://github.com/amadxx/sshexpect.git
+pip install sshexpect
 ```
 
 ## License

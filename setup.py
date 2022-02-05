@@ -23,20 +23,30 @@
     SOFTWARE.
 """
 
+import setuptools
 from distutils.core import setup
+import os.path
+
+here = os.path.abspath(os.path.dirname(__file__))
+
+# Get the long description from the README file
+with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(name='sshexpect',
-        version="1.0.3",
+        version="1.0.6",
         description='pexpect for asyncssh and paramiko',
         author='Dmytro Pavlyuk',
         author_email='dmitry.pavluk@gmail.com',
-        url='http://www.amad.pp.ua',
+        url='https://github.com/amadxx/sshexpect',
         license="MIT",
         classifiers=[
           "License :: OSI Approved :: MIT License",
           "Programming Language :: Python :: 3",
           "Programming Language :: Python :: 3.8",
         ],
+        long_description_content_type="text/markdown",
+        long_description=long_description,
         package_dir={'sshexpect': 'sshexpect',},
       	packages=['sshexpect'],
         install_requires=["pexpect"]
