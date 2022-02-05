@@ -1,5 +1,10 @@
 # sshexpect
 
+
+
+[![PyPi Version](https://img.shields.io/pypi/v/sshexpect.svg)](https://pypi.org/project/sshexpect/)
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/amadxx/sshexpect/blob/main/LICENSE)
+
 ## Overview
 
 This library adapts `pexpect` to work with `asyncssh` and `paramiko`
