@@ -31,6 +31,12 @@ setup(name='sshexpect',
         author='Dmytro Pavlyuk',
         author_email='dmitry.pavluk@gmail.com',
         url='http://www.amad.pp.ua',
+        license="MIT",
+        classifiers=[
+          "License :: OSI Approved :: MIT License",
+          "Programming Language :: Python :: 3",
+          "Programming Language :: Python :: 3.8",
+        ],
         package_dir={'sshexpect': 'sshexpect',},
       	packages=['sshexpect'],
         install_requires=["pexpect"]
