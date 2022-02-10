@@ -3,6 +3,7 @@
 
 
 [![PyPi Version](https://img.shields.io/pypi/v/sshexpect.svg)](https://pypi.org/project/sshexpect/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/sshexpect.svg)](https://pypi.org/project/sshexpect/)
 [![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/amadxx/sshexpect/blob/main/LICENSE)
 
 ## Overview
@@ -47,8 +48,12 @@ child.terminate()
 ```
 
 ## Installation 
-```shell
+```bash
+# from pypi
 pip install sshexpect
+
+# from sources
+pip install git+https://github.com/amadxx/sshexpect.git
 ```
 
 ## License
